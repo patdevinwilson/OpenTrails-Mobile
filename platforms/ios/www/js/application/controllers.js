@@ -91,7 +91,8 @@
       positionMarker.addTo(Map);
 
       var onGeolocationSuccess = function (position) {
-        $scope.currentPosition = position;
+        $scope.geoposition = position;
+        console.log(position)
       }
 
       var onGeolocationError = function () {
@@ -102,6 +103,14 @@
         onGeolocationSuccess,
         onGeolocationError
       );
+
+      window.marker = positionMarker;
+
+      $scope.$watch('geoposition', function (gp) {
+        if (gp) {
+          positionMarker.setPosition([ $scope.geoposition.coords.latitude, $scope.geoposition.coords.longitude ]);
+        }
+      })
 
       $scope.recenter = function () {
         Map.setView(positionMarker.getPosition(), Map.DEFAULT_ZOOM);
